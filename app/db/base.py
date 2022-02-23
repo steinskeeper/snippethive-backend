@@ -7,3 +7,4 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 db = Session()
 Base = declarative_base()
+

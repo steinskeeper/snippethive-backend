@@ -93,6 +93,7 @@ class User(Base):
             "bio": self.bio,
 
         }
+        
 
 
 class Snippet(Base):
@@ -109,7 +110,7 @@ class Snippet(Base):
     language = Column(String, nullable=True)
     theme = Column(String, nullable=True)
 
-    def __init__(self, title, desc, user_id, snippet,language,theme):
+    def __init__(self, title, desc, user_id, snippet, language, theme):
         self.snippet_id = next(f3)
         self.title = title
         self.desc = desc

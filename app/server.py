@@ -1,22 +1,13 @@
 from fastapi import FastAPI
-
 from app.auth.auth_routes import auth
 from app.snippet.snippet_routes import snippet
 from app.user.user_routes import user
-
 from fastapi.middleware.cors import CORSMiddleware
-
-from app.db.base import Base, engine
-import os
-
 
 app = FastAPI()
 origins = [
-    # "http://localhost.tiangolo.com",
-    # "https://localhost.tiangolo.com",
     "http://localhost",
     "http://localhost:3000",
-
 ]
 
 app.add_middleware(

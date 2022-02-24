@@ -66,13 +66,14 @@ async def get_snippet(snippet_id: int):
     sentence = result.title
     corpus_embeddings = model.encode(corpus, convert_to_tensor=True)
     sentence_embedding = model.encode(sentence, convert_to_tensor=True)
-    top_k = 2
+    top_k = 3
 
     cos_scores = util.pytorch_cos_sim(sentence_embedding, corpus_embeddings)[0]
 
     top_results = np.argpartition(-cos_scores, range(top_k))[0:top_k]
     for idx in top_results[0:top_k]:
         suggest_array.append(idx.item())
+    print(suggest_array)
     
     dict_keys=list(dict)
     values=dict.values()
@@ -80,6 +81,7 @@ async def get_snippet(snippet_id: int):
 
     for j in ((suggest_array)):
         suggestion_dict.update({dict_keys[j]: dict_values[j]})
+    
     snippet = result.format()
     snippet["username"] = user.name
     snippet["suggestions"] = suggestion_dict
@@ -104,13 +106,14 @@ async def get_snippet_suggest(snippet_id: int):
     sentence = result.title
     corpus_embeddings = model.encode(corpus, convert_to_tensor=True)
     sentence_embedding = model.encode(sentence, convert_to_tensor=True)
-    top_k = 2
+    top_k = 3
 
     cos_scores = util.pytorch_cos_sim(sentence_embedding, corpus_embeddings)[0]
 
     top_results = np.argpartition(-cos_scores, range(top_k))[0:top_k]
     for idx in top_results[0:top_k]:
         suggest_array.append(idx.item())
+    print(suggest_array)
     
     dict_keys=list(dict)
     values=dict.values()
@@ -122,3 +125,11 @@ async def get_snippet_suggest(snippet_id: int):
 
     
     return suggestion_dict
+
+@snippet.get("/delete-snippet")
+async def delete_snippet(snippet_id: int):
+    result = db.query(Snippet).filter(Snippet.snippet_id == snippet_id).first()
+    if result is None:
+        raise HTTPException(status_code=404, detail="Snippet not found")
+    result.delete()
+    return {"message": "success"}
